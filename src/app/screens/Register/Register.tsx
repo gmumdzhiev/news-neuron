@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import sha256 from "js-sha256";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
@@ -16,7 +17,6 @@ import {
 import icon from "../../../assets/nn-icon.png";
 // @ts-expect-error: Ignoring missing module error for logo import
 import backgroundImage from "../../../assets/newspaper-background.png"; // Import the background image
-
 
 interface FormData {
   email: string;
@@ -39,10 +39,32 @@ export const Register = () => {
     });
   };
 
+  const hashPassword = (password: string) => {
+    return sha256.sha256(password);
+  };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Registration Data:", formData);
-    navigate("/");
+
+    if (formData.password !== formData.confirmPassword) {
+      console.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      const hashedPassword = hashPassword(formData.password);
+      const user = {
+        email: formData.email,
+        hashedPassword,
+      };
+
+      // Save user data in local storage
+      localStorage.setItem("registeredUser", JSON.stringify(user));
+
+      console.log("User registered successfully");
+      navigate("/");
+    } catch (error) {
+      console.error("Error registering user:", (error as Error).message);
+    }
   };
 
   return (
@@ -64,7 +86,7 @@ export const Register = () => {
         justifyContent="center"
         sx={{ minHeight: "100vh" }}
       >
-     <Paper
+        <Paper
           elevation={3}
           sx={{
             padding: 3,
