@@ -3,8 +3,9 @@ import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import { Global } from "@emotion/react";
-import { Login } from "./screens/Login/Login";
+import { Register } from "./screens/Register/Register";
 import { TopBar } from "../common/components/Toolbar/Toolbar";
+import { ResetPassword } from "./screens/ResetPassword/ResetPassword";
 
 export const App = () => {
   return (
@@ -12,7 +13,8 @@ export const App = () => {
       <Global styles={{ body: { background: "#e0e0e0" } }} />
       <TopBar/>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/reset-password" element={<ResetPassword/>}/>
       </Routes>
     </>
   );

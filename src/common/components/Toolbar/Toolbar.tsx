@@ -4,7 +4,7 @@ import Container from "@mui/material/Container";
 
 import { Box, Typography } from "@mui/material";
 
-import { StyledIconContainer, StyledToolbar } from "./style";
+import { StyledSubContainer, StyledToolbar } from "./style";
 import { LeftSideMenu } from "./components/LeftSideMenu/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu/RightSideMenu";
 import { Navigation } from "./components/Navigation/Navigation";
@@ -42,14 +42,14 @@ export const TopBar = () => {
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <DesktopLogo />
-            <StyledIconContainer>
+            <StyledSubContainer>
               <Typography
                 variant="body1"
                 sx={{ marginLeft: 2, alignSelf: "center", color: "grey" }}
               >
                 Stimulate your mind with the latest news
               </Typography>
-            </StyledIconContainer>
+            </StyledSubContainer>
           </Box>
 
           <Navigation

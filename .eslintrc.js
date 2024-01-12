@@ -57,7 +57,7 @@ module.exports = {
       "arrow-body-style": "off",
       "react/prop-types": 0,
       "react/function-component-definition": "off",
-      "indent": "off",
+      "indent": ["error", 4],
       "react/destructuring-assignment": 0,
       "react/jsx-props-no-spreading": 0,
       "react/require-default-props": 0,

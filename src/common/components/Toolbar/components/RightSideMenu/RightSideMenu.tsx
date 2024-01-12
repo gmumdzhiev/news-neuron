@@ -16,11 +16,11 @@ import Link from "@mui/material/Link";
 import { FormControlLabel } from "@mui/material";
 import { StyledIcon, StyledIconContainer } from "./style";
 import { SettingsMenu } from "../settings/SettingsMenu/SettingsMenu";
+
 // @ts-expect-error: Ignoring missing module error for logo import
 import icon from "../../../../../assets/nn-icon.png";
 
 import { Copyright } from "../common/Copyright/Copyright";
-
 
 export const RightSideMenu = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -60,7 +60,7 @@ export const RightSideMenu = () => {
           onClick={loggedIn ? handleOpenUserMenu : handleDrawerOpen}
           sx={{ p: 0 }}
         >
-          <Avatar alt="User" src="/static/images/avatar/2.jpg" />
+          <Avatar alt="User" />
         </IconButton>
       </Tooltip>
 
@@ -94,7 +94,7 @@ export const RightSideMenu = () => {
         <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
           <Grid
             item
-            sx={{boxShadow: 'none'}}
+            sx={{ boxShadow: "none" }}
             xs={12}
             sm={8}
             md={5}
@@ -158,17 +158,17 @@ export const RightSideMenu = () => {
                 </Button>
                 <Grid container>
                   <Grid item xs>
-                    <Link href="/forgot-password" variant="body2">
-                      Forgot password?
+                    <Link href="/register" variant="body2">
+                      No account? Sign Up
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="/register" variant="body2">
-                      Do not have an account? Sign Up
+                    <Link href="/reset-password" variant="body2">
+                      Forgot password?
                     </Link>
                   </Grid>
                 </Grid>
-                <Copyright sx={{ mt: 5 }} />
+                <Copyright />
               </Box>
             </Box>
           </Grid>

@@ -26,6 +26,6 @@ export const StyledToolbar = styled(AppBar)`
     background: #fff;
 `
 
-export const StyledIconContainer = styled(Box)`
+export const StyledSubContainer = styled(Box)`
 animation: 2s ${fadeInFromTop} ease-out 
 `;
