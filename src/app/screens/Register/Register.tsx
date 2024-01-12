@@ -6,6 +6,8 @@ import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps, AlertColor } from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import { useNavigate } from "react-router-dom";
 import {
@@ -24,6 +26,15 @@ interface FormData {
   confirmPassword: string;
 }
 
+interface User {
+  email: string;
+  hashedPassword: string;
+}
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
+  <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
+));
+
 export const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
@@ -31,6 +42,11 @@ export const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<string>("success");
+  const vertical = "bottom";
+  const horizontal = "right";
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -42,25 +58,59 @@ export const Register = () => {
   const hashPassword = (password: string) => {
     return sha256.sha256(password);
   };
+
+  const handleSnackBarClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setSnackbarOpen(true);
 
     if (formData.password !== formData.confirmPassword) {
       console.error("Passwords do not match");
+      setSnackbarMessage("Passwords do not match");
+      setSnackbarSeverity("warning");
       return;
     }
 
     try {
+      const existingUsersJSON = localStorage.getItem("registeredUsers");
+      const existingUsers = existingUsersJSON
+        ? JSON.parse(existingUsersJSON)
+        : [];
+
+      const isUserRegistered = existingUsers.some(
+        (user: User) => user.email === formData.email,
+      );
+      if (isUserRegistered) {
+        console.error("User with this email already exists");
+        setSnackbarMessage("User with this email already exists");
+        setSnackbarSeverity("error");
+        return;
+      }
+
       const hashedPassword = hashPassword(formData.password);
-      const user = {
+
+      const newUser = {
         email: formData.email,
         hashedPassword,
       };
 
-      // Save user data in local storage
-      localStorage.setItem("registeredUser", JSON.stringify(user));
+      existingUsers.push(newUser);
+
+      localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
 
       console.log("User registered successfully");
+      setSnackbarMessage("User registered successfully");
+      setSnackbarSeverity("success");
       navigate("/");
     } catch (error) {
       console.error("Error registering user:", (error as Error).message);
@@ -156,6 +206,22 @@ export const Register = () => {
           </Box>
         </Paper>
       </Grid>
+      {snackbarOpen && (
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackBarClose}
+        >
+          <Alert
+            onClose={handleSnackBarClose}
+            severity={snackbarSeverity as AlertColor}
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      )}
     </Box>
   );
 };
