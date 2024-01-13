@@ -1,6 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import { useWindowDimensions } from "../../../../utils/useWindowDimensions";
+import { useWindowDimensions } from "../../../../utils/hooks/useWindowDimensions";
 import { StyledLogo } from "../common/style";
 
 // @ts-expect-error: Ignoring missing module error for logo import

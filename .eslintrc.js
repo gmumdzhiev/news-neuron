@@ -54,6 +54,7 @@ module.exports = {
           namedComponents: "function-declaration",
         },
       ],
+      "no-param-reassign": [2, { "props": false }],
       "arrow-body-style": "off",
       "react/prop-types": 0,
       "react/function-component-definition": "off",
@@ -74,7 +75,7 @@ module.exports = {
       // ],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "max-len": ["error", { code: 120,  ignorePattern: '^import .*' }],
+      "max-len": ["error", { code: 130,  ignorePattern: '^import .*' }],
       indent: "error",
     },
   };
