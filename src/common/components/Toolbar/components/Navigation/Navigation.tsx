@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -7,18 +8,23 @@ import { IProps } from "./IProps";
 
 export const Navigation = ({
   handleCloseNavMenu,
-  handlePageClick,
   selectedPage,
+  setSelectedPage
 }: IProps) => {
+  const navigate = useNavigate();
+
+  const handlePageClick = (title: string, route: string) => {
+    handleCloseNavMenu();
+    setSelectedPage(title)
+    navigate(route);
+  };
+
   return (
-    <Box sx={{display: { xs: "none", md: "flex" }, margin: '0 16px' }}>
+    <Box sx={{ display: { xs: "none", md: "flex" }, margin: '0 16px' }}>
       {PageMenu.map((page) => (
         <Button
           key={page.id}
-          onClick={() => {
-            handleCloseNavMenu();
-            handlePageClick(page.title);
-          }}
+          onClick={() => handlePageClick(page.title, page.route)}
           sx={{
             my: 2,
             color: selectedPage === page.title ? "black" : "grey",

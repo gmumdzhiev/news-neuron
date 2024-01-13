@@ -20,7 +20,8 @@ export const TopBar = () => {
   };
 
   const handlePageClick = (page: string) => {
-    setSelectedPage(page);
+    console.log(page)
+
     handleCloseNavMenu();
   };
 
@@ -56,6 +57,7 @@ export const TopBar = () => {
             handleCloseNavMenu={handleCloseNavMenu}
             handlePageClick={handlePageClick}
             selectedPage={selectedPage}
+            setSelectedPage={setSelectedPage}
           />
 
           <RightSideMenu />
