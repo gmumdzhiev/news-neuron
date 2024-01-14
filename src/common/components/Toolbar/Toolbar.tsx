@@ -19,13 +19,9 @@ export const TopBar = () => {
     setAnchorElNav(null);
   };
 
-  const handlePageClick = (page: string) => {
-    console.log(page)
-
+  const handlePageClick = () => {
     handleCloseNavMenu();
   };
-
-  console.log("selectedPage", selectedPage);
 
   return (
     <StyledToolbar position="static">

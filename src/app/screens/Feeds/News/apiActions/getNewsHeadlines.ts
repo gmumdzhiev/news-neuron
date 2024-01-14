@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { INewsArticle, INewsArticleError } from "../interface/INewsArticle";
 
-export const getNewsFeeds = createAsyncThunk<
+export const getNewsHeadlines = createAsyncThunk<
   INewsArticle[],
   void,
   { rejectValue: INewsArticleError }
 >("getNewsFeed/get", async () => {
   const response = await fetch(
-    `https://newsapi.org/v2/everything?q=europe&apiKey=5a45d74ca09549f0965caf9962658e09`,
+    `https://newsapi.org/v2/top-headlines?country=us&apiKey=5a45d74ca09549f0965caf9962658e09`,
     { method: "GET" },
   );
 

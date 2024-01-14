@@ -1,3 +1,4 @@
-import newsReducer from '../newsSlice';
+import newsReducer from '../slices/newsSlice';
+import headlinesReducer from '../slices/headlinesSlice'
 
-export { newsReducer };
+export { newsReducer, headlinesReducer };
