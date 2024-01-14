@@ -103,8 +103,17 @@ export const NewsFeed = () => {
               md={index % 3 === 0 ? 12 : 6}
             >
               <Link
-                to={`feed-details/${article.source.id}`}
-                state={{ title: article.title, id: article.source.id }}
+                to={`feed-details/${index}`}
+                state={{
+                  title: article.title,
+                  description: article.description,
+                  content: article.content,
+                  date: article.publishedAt,
+                  author: article.author,
+                  url: article.url,
+                  image: article.urlToImage,
+                  id: index,
+                }}
                 style={{ textDecoration: "none" }}
               >
                 <Paper
@@ -140,8 +149,17 @@ export const NewsFeed = () => {
         return (
           <Grid key={key} item xs={12} md={index % 3 === 0 ? 12 : 6}>
             <Link
-              to={`feed-details/${article.source.id}`}
-              state={{ title: article.title, id: article.source.id }}
+              to={`feed-details/${index}`}
+              state={{
+                title: article.title,
+                description: article.description,
+                content: article.content,
+                date: article.publishedAt,
+                author: article.author,
+                url: article.url,
+                image: article.urlToImage,
+                id: index,
+              }}
             >
               <Paper
                 className={`${classes.paper} ${
