@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "../initialHeadlineState";
-import { getNewsHeadlines } from "../apiActions/getNewsHeadlines";
+import { initialState } from "../../initialHeadlineState";
+import { getNewsHeadlines } from "../../apiActions/getNewsHeadlines";
 
 export const headlinesSlice = createSlice({
   name: "headlines",

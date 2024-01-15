@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from "../initialNewsState";
-import { getNewsFeeds } from "../apiActions/getNewsFeeds";
+import { initialState } from "../../initialNewsState";
+import { getNewsFeeds } from "../../apiActions/getNewsFeeds";
 
 export const newsSlice = createSlice({
   name: "news",

@@ -12,6 +12,7 @@ import { Sport } from "./screens/Feeds/Sport/Sport";
 import { Entertainment } from "./screens/Feeds/Entertainment/Entertainment";
 import { NewsHeadlineDetails } from "./screens/Feeds/News/components/NewsHeadlines/components/NewsHeadlineDetails/NewsHeadlineDetails";
 import { NewsFeedDetails } from "./screens/Feeds/News/components/NewsFeed/components/NewsFeedDetails/NewsFeedDetails";
+import { Favourites } from "./screens/Favourites/Favourites";
 
 export const App = () => {
   return (
@@ -19,6 +20,7 @@ export const App = () => {
       <Global styles={{ body: { background: "#e0e0e0" } }} />
       <TopBar />
       <Routes>
+        <Route path="/favourites" element={<Favourites/>}/>
         <Route path="/register" element={<Register />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/news/*" element={<News />}>

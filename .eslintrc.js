@@ -75,7 +75,7 @@ module.exports = {
       // ],
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "max-len": ["error", { code: 130,  ignorePattern: '^import .*' }],
+      "max-len": ["error", { code: 150,  ignorePattern: '^import .*' }],
       indent: "error",
     },
   };

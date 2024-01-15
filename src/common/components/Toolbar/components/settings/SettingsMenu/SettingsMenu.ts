@@ -1,14 +1,12 @@
 export const SettingsMenu = [
   {
     id: 1,
-    title: 'Profile'       
+    title: 'Profile',
+    route: '/profile'    
   },
   {
     id: 2,
-    title: 'Account'
+    title: 'Favourites',
+    route: '/favourites'
   },     
-  {
-    id: 3,
-    title: 'Dashboard'
-  },    
 ]

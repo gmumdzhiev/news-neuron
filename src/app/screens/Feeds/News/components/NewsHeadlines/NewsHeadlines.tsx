@@ -33,17 +33,19 @@ export const NewsHeadlines = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
-  const newList = useAppSelector((state) => state.newsHeadlines.list);
+  const newHeadlinesList = useAppSelector((state) => state.newsHeadlines.list);
+
+  console.log('newHeadlinesList', newHeadlinesList)
 
   useEffect(() => {
     dispatch(getNewsHeadlines());
   }, [dispatch]);
 
-  if (!newList) {
+  if (!newHeadlinesList) {
     return <div>Loading...</div>;
   }
 
-  const headlinesToShow = newList.length ? newList.slice(0, 20) : [];
+  const headlinesToShow = newHeadlinesList.length ? newHeadlinesList.slice(0, 20) : [];
 
   return (
     <>

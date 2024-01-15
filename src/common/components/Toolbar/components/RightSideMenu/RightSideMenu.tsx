@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import sha256 from "js-sha256";
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
@@ -25,6 +26,7 @@ import icon from "../../../../../assets/nn-icon.png";
 
 import { Copyright } from "../common/Copyright/Copyright";
 
+
 interface User {
   email: string;
   hashedPassword: string;
@@ -35,6 +37,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
 ));
 
 export const RightSideMenu = () => {
+  const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -72,14 +75,17 @@ export const RightSideMenu = () => {
     e.preventDefault();
 
     const existingUsersJSON = localStorage.getItem("registeredUsers");
-    const existingUsers = existingUsersJSON ? JSON.parse(existingUsersJSON) : [];
+    const existingUsers = existingUsersJSON
+      ? JSON.parse(existingUsersJSON)
+      : [];
 
     const email = e.currentTarget.email.value;
     const password = e.currentTarget.password.value;
     const hashedPassword = sha256.sha256(password);
 
     const authenticatedUser = existingUsers.find(
-      (user: User) => user.email === email && user.hashedPassword === hashedPassword,
+      (user: User) =>
+        user.email === email && user.hashedPassword === hashedPassword,
     );
 
     if (authenticatedUser) {
@@ -91,10 +97,14 @@ export const RightSideMenu = () => {
         localStorage.setItem("rememberMeToken", "your-token-here");
       }
 
+      localStorage.setItem("currentUserEmail", email);
+
       handleDrawerClose();
     } else {
       setSnackbarOpen(true);
-      setSnackbarMessage("Authentication failed. Please check your credentials.");
+      setSnackbarMessage(
+        "Authentication failed. Please check your credentials.",
+      );
       setSnackbarSeverity("error");
     }
   };
@@ -113,6 +123,8 @@ export const RightSideMenu = () => {
   const handleLogout = () => {
     setLoggedIn(false);
     handleCloseUserMenu();
+    localStorage.removeItem("currentUserEmail");
+    navigate('/')
   };
 
   return (
@@ -144,9 +156,17 @@ export const RightSideMenu = () => {
           onClose={handleCloseUserMenu}
         >
           {SettingsMenu.map((setting) => (
-            <MenuItem key={setting.id} onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">{setting.title}</Typography>
-            </MenuItem>
+            <Link
+              key={setting.id}
+              href={setting.route}
+              style={{ textDecoration: "none" }}
+            >
+              <MenuItem key={setting.id} onClick={handleCloseUserMenu}>
+                <Typography textAlign="center" style={{ color: "#000000" }}>
+                  {setting.title}
+                </Typography>
+              </MenuItem>
+            </Link>
           ))}
           <MenuItem onClick={handleLogout}>
             <Typography textAlign="center">Logout</Typography>

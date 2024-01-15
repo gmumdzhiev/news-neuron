@@ -6,12 +6,23 @@ export const getNewsFeeds = createAsyncThunk<
   void,
   { rejectValue: INewsArticleError }
 >("getNewsFeed/get", async () => {
-  const response = await fetch(
-    `https://newsapi.org/v2/everything?q=europe&apiKey=5a45d74ca09549f0965caf9962658e09`,
-    { method: "GET" },
-  );
+  const today = new Date();
+  const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+  
+  const formattedToday = today.toISOString().split("T")[0];
+  const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split("T")[0];
+
+  const url = [
+    "https://newsapi.org/v2/everything?q=europe",
+    `&from=${formattedSevenDaysAgo}`,
+    `&to=${formattedToday}`,
+    "&sortBy=popularity",
+    "&apiKey=5a45d74ca09549f0965caf9962658e09"
+  ].join("");
+
+  const response = await fetch(url, { method: "GET" });
 
   const data = await response.json();
-
+  console.log('getNewsFeeds',data)
   return data.articles;
 });

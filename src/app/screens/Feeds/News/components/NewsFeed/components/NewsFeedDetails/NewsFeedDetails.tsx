@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
   title: {
     margin: "0",
     color: "#232a31",
-    fontSize: "3.5em",
+    fontSize: "3.5em !important",
     fontStretch: "normal",
     fontStyle: "normal",
     fontWeight: "700",
@@ -45,7 +45,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: "16px",
   },
   description: {
-    fontSize: "1.846em",
+    fontSize: "1.846em !important",
     fontWeight: "400",
     lineHeight: "1.42",
     color: "#5b636a",

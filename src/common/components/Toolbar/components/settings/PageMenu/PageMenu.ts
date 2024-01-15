@@ -16,7 +16,7 @@ export const PageMenu = [
   },
   {
     id: 4,
-    title: "Entertainment",
-    route: "/entertainment"
+    title: "Local",
+    route: "/local"
   },
 ];
