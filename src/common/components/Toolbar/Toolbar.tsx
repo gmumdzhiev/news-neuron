@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 
@@ -10,13 +10,20 @@ import { RightSideMenu } from "./components/RightSideMenu/RightSideMenu";
 import { Navigation } from "./components/Navigation/Navigation";
 import { MobileLogo } from "./components/MobileLogo/MobileLogo";
 import { DesktopLogo } from "./components/DesktopLogo/DesktopLogo";
-// import { useAppDispatch } from "../../utils/hooks/reduxHooks";
-// import { getWeatherData } from "../../apiActions/getWeather";
 
 export const TopBar = () => {
-  // const dispatch = useAppDispatch()
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedPage, setSelectedPage] = useState<null | string>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
+  const rememberMeToken = localStorage.getItem("rememberMeToken");
+  const currentUserEmail = localStorage.getItem("currentUserEmail");
+
+  useEffect(() => {
+    if (rememberMeToken || currentUserEmail) {
+      setLoggedIn(true);
+    }
+  }, [rememberMeToken, currentUserEmail]);
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -26,9 +33,7 @@ export const TopBar = () => {
     handleCloseNavMenu();
   };
 
-  // useEffect(() => {
-  //   dispatch(getWeatherData());
-  // }, [dispatch]);
+
   return (
     <StyledToolbar position="static">
       <Container maxWidth="xl">
@@ -62,7 +67,7 @@ export const TopBar = () => {
             setSelectedPage={setSelectedPage}
           />
 
-          <RightSideMenu />
+          <RightSideMenu loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
         </Toolbar>
       </Container>
     </StyledToolbar>

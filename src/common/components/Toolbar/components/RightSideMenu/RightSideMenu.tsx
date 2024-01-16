@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import sha256 from "js-sha256";
 import Box from "@mui/material/Box";
@@ -25,7 +25,7 @@ import { SettingsMenu } from "../settings/SettingsMenu/SettingsMenu";
 import icon from "../../../../../assets/nn-icon.png";
 
 import { Copyright } from "../common/Copyright/Copyright";
-
+import { IProps } from "./IProps";
 
 interface User {
   email: string;
@@ -36,22 +36,14 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
   <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
 ));
 
-export const RightSideMenu = () => {
+export const RightSideMenu = ({ loggedIn, setLoggedIn }: IProps) => {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>("");
   const [snackbarSeverity, setSnackbarSeverity] = useState<string>("success");
-
-  const rememberMeToken = localStorage.getItem("rememberMeToken");
-
-  useEffect(() => {
-    if (rememberMeToken) {
-      setLoggedIn(true);
-    }
-  }, [rememberMeToken]);
 
   const rememberCheckboxRef = useRef<HTMLInputElement | null>(null);
 
@@ -124,7 +116,7 @@ export const RightSideMenu = () => {
     setLoggedIn(false);
     handleCloseUserMenu();
     localStorage.removeItem("currentUserEmail");
-    navigate('/')
+    navigate("/");
   };
 
   return (

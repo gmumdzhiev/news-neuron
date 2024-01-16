@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from "react";
 import { Link } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -27,10 +26,7 @@ import { getNewsFeeds } from "../../apiActions/getNewsFeeds";
 // @ts-expect-error: Ignoring missing module error for image import
 import paperDefaultImage from "../../../../../../assets/newspaper-background.png";
 import { StyledTextContainer } from "./style";
-import {
-  addFavourite,
-  removeFavourite,
-} from "../../../../Favourites/favouritesSlice";
+
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -66,14 +62,23 @@ export const NewsFeed = () => {
   const [news, setNews] = useState<INewsArticle[]>([]);
   const [page, setPage] = useState(1);
 
-  const [favourites, setFavourites] = useState<Record<string, INewsArticle>>(() => {
-    const storedFavourites = JSON.parse(localStorage.getItem("favourites") || "{}");
-    const favouritesObject: Record<string, INewsArticle> = {};
-    storedFavourites.forEach((article: INewsArticle) => {
-      favouritesObject[article.id] = article;
-    });
-    return favouritesObject;
-  });
+  const [favoriteArticles, setFavoriteArticles] = useState<{
+    [key: string]: INewsArticle[];
+  }>({});
+
+  useEffect(() => {
+    const loadedFavorites = JSON.parse(
+      localStorage.getItem("favorites") || "{}",
+    );
+    setFavoriteArticles(loadedFavorites);
+  }, []);
+
+
+  useEffect(() => {
+    localStorage.setItem('favorites', JSON.stringify(favoriteArticles));
+    console.log('Favorites updated:', favoriteArticles); 
+  }, [favoriteArticles]);
+
   const observer = useRef<IntersectionObserver | null>(null);
 
   const lastArticleElementRef = useCallback(
@@ -89,39 +94,35 @@ export const NewsFeed = () => {
     [news, newsArticles],
   );
 
-  const handleFavoriteClick = (
-    article: INewsArticle,
-    event: React.MouseEvent,
-  ) => {
-    event.stopPropagation();
-  
-    const articleId = article.id ?? uuidv4();
-  
-    const isFavourite = Boolean(favourites[articleId]);
-  
-    if (isFavourite) {
-      dispatch(removeFavourite(articleId));
+  const handleFavoriteClick = (index: number) => {
+    const currentUserEmail = localStorage.getItem("currentUserEmail");
+    if (!currentUserEmail) return;
+
+    const currentFavorites = favoriteArticles[currentUserEmail] || [];
+    const isFavorite = currentFavorites.some(
+      (article) => article.source.id === news[index].source.id,
+    );
+
+    if (isFavorite) {
+      const updatedFavorites = currentFavorites.filter(
+        (article) => article.source.id !== news[index].source.id,
+      );
+      setFavoriteArticles({
+        ...favoriteArticles,
+        [currentUserEmail]: updatedFavorites,
+      });
     } else {
-      const favouriteArticle = { ...article, id: articleId };
-      dispatch(addFavourite(favouriteArticle));
+      const updatedFavorites = [...currentFavorites, news[index]];
+      setFavoriteArticles({
+        ...favoriteArticles,
+        [currentUserEmail]: updatedFavorites,
+      });
     }
   };
 
   useEffect(() => {
-    const currentUserEmail = localStorage.getItem("currentUserEmail");
-    if (currentUserEmail) {
-      const userFavourites = localStorage.getItem(
-        `favourites-${currentUserEmail}`,
-      );
-      if (userFavourites) {
-        setFavourites(JSON.parse(userFavourites));
-      }
-    }
-  }, []);
-
-  useEffect(() => {
     dispatch(getNewsFeeds());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     setNews((prevNews) => [
@@ -140,6 +141,13 @@ export const NewsFeed = () => {
         const key = `${article.source.id}-${index}`;
         const backgroundImage = article.urlToImage || paperDefaultImage;
         const isSmallPaper = index % 3 !== 0;
+        const currentUserEmail = localStorage.getItem("currentUserEmail");
+        if (!currentUserEmail) return null;
+
+        const currentFavorites = favoriteArticles[currentUserEmail] || [];
+        const isFavorite = currentFavorites.some(
+          (favArticle) => favArticle.source.id === article.source.id,
+        );
         if (news.length === index + 1) {
           return (
             <Grid
@@ -158,15 +166,9 @@ export const NewsFeed = () => {
                     zIndex: 1,
                     background: "#ffffff",
                   }}
-                  onClick={(event) => handleFavoriteClick(article, event)}
+                  onClick={() => handleFavoriteClick(index)}
                 >
-                  {favouriteArticles.some(
-                    (favouriteArticle) => favouriteArticle.id === article.id,
-                  ) ? (
-                    <Favorite />
-                    ) : (
-                    <FavoriteBorder />
-                    )}
+                  {isFavorite ? <Favorite /> : <FavoriteBorder />}
                 </IconButton>
                 <Link
                   to={`feed-details/${index}`}
@@ -224,15 +226,9 @@ export const NewsFeed = () => {
                   zIndex: 1,
                   background: "#ffffff",
                 }}
-                onClick={(event) => handleFavoriteClick(article, event)}
+                onClick={() => handleFavoriteClick(index)}
               >
-                {favouriteArticles.some(
-                  (favouriteArticle) => favouriteArticle.id === article.id,
-                ) ? (
-                  <Favorite />
-                  ) : (
-                  <FavoriteBorder />
-                  )}
+                {isFavorite ? <Favorite /> : <FavoriteBorder />}
               </IconButton>
               <Link
                 to={`feed-details/${index}`}

@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { newsReducer } from "../screens/Feeds/News/components/NewsFeed/reducer";
 import { headlinesReducer } from "../screens/Feeds/News/components/NewsHeadlines/reducer";
-import { favouritesReducer } from "../screens/Favourites/reducer";
 
 export const store = configureStore({
   reducer: {
     news: newsReducer,
     newsHeadlines: headlinesReducer,
-    favourites: favouritesReducer,
   },
 });
 
