@@ -6,7 +6,6 @@ import React, {
   useMemo,
 } from "react";
 import { Link } from "react-router-dom";
-
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -26,7 +25,6 @@ import { getNewsFeeds } from "../../apiActions/getNewsFeeds";
 // @ts-expect-error: Ignoring missing module error for image import
 import paperDefaultImage from "../../../../../../assets/newspaper-background.png";
 import { StyledTextContainer } from "./style";
-
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -58,7 +56,14 @@ export const NewsFeed = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
   const newsList = useAppSelector((state) => state.news.list);
-  const newsArticles = useMemo(() => newsList || [], [newsList]);
+  const newsArticles = useMemo(
+    () =>
+      newsList?.map((article) => ({
+        ...article,
+        uniqueId: `${article.title}-${article.publishedAt}`,
+      })) || [],
+    [newsList],
+  );
   const [news, setNews] = useState<INewsArticle[]>([]);
   const [page, setPage] = useState(1);
 
@@ -67,16 +72,15 @@ export const NewsFeed = () => {
   }>({});
 
   useEffect(() => {
-    const loadedFavorites = JSON.parse(
+    const loadedFavoriteArticles = JSON.parse(
       localStorage.getItem("favorites") || "{}",
     );
-    setFavoriteArticles(loadedFavorites);
+    setFavoriteArticles(loadedFavoriteArticles);
   }, []);
 
-
   useEffect(() => {
-    localStorage.setItem('favorites', JSON.stringify(favoriteArticles));
-    console.log('Favorites updated:', favoriteArticles); 
+    localStorage.setItem("favorites", JSON.stringify(favoriteArticles));
+    console.log("Favorites updated:", favoriteArticles);
   }, [favoriteArticles]);
 
   const observer = useRef<IntersectionObserver | null>(null);
@@ -94,30 +98,58 @@ export const NewsFeed = () => {
     [news, newsArticles],
   );
 
+  // const handleFavoriteClick = (index: number) => {
+  //   const currentUserEmail = localStorage.getItem("currentUserEmail");
+  //   if (!currentUserEmail) return;
+  
+  //   const currentFavorites = favoriteArticles[currentUserEmail] || [];
+  //   const isFavorite = currentFavorites.some(
+  //     (article) => article.uniqueId === news[index].uniqueId,
+  //   );
+  
+  //   let updatedFavorites;
+  //   if (isFavorite) {
+  //     updatedFavorites = currentFavorites.filter(
+  //       (article) => article.uniqueId !== news[index].uniqueId,
+  //     );
+  //   } else {
+  //     updatedFavorites = [...currentFavorites, news[index]];
+  //   }
+  
+  //   const updatedFavoriteArticles = {
+  //     ...favoriteArticles,
+  //     [currentUserEmail]: updatedFavorites,
+  //   };
+  //   setFavoriteArticles(updatedFavoriteArticles);
+  
+  //   localStorage.setItem("favorites", JSON.stringify(updatedFavoriteArticles));
+  // };
+
   const handleFavoriteClick = (index: number) => {
     const currentUserEmail = localStorage.getItem("currentUserEmail");
     if (!currentUserEmail) return;
-
+  
     const currentFavorites = favoriteArticles[currentUserEmail] || [];
     const isFavorite = currentFavorites.some(
-      (article) => article.source.id === news[index].source.id,
+      (article) => article.uniqueId === news[index].uniqueId,
     );
-
+  
+    let updatedFavorites;
     if (isFavorite) {
-      const updatedFavorites = currentFavorites.filter(
-        (article) => article.source.id !== news[index].source.id,
+      updatedFavorites = currentFavorites.filter(
+        (article) => article.uniqueId !== news[index].uniqueId,
       );
-      setFavoriteArticles({
-        ...favoriteArticles,
-        [currentUserEmail]: updatedFavorites,
-      });
     } else {
-      const updatedFavorites = [...currentFavorites, news[index]];
-      setFavoriteArticles({
-        ...favoriteArticles,
-        [currentUserEmail]: updatedFavorites,
-      });
+      updatedFavorites = [...currentFavorites, {...news[index], favScore: 0}];
     }
+  
+    const updatedFavoriteArticles = {
+      ...favoriteArticles,
+      [currentUserEmail]: updatedFavorites,
+    };
+    setFavoriteArticles(updatedFavoriteArticles);
+  
+    localStorage.setItem("favorites", JSON.stringify(updatedFavoriteArticles));
   };
 
   useEffect(() => {
@@ -146,7 +178,7 @@ export const NewsFeed = () => {
 
         const currentFavorites = favoriteArticles[currentUserEmail] || [];
         const isFavorite = currentFavorites.some(
-          (favArticle) => favArticle.source.id === article.source.id,
+          (favArticle) => favArticle.uniqueId === article.uniqueId,
         );
         if (news.length === index + 1) {
           return (

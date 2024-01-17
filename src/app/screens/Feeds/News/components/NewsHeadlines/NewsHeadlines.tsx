@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
     height: "180px",
   },
   title: {
-    fontSize: "0.85em",
+    fontSize: "0.85em !important",
     color: "#ffffff"
   },
 }));

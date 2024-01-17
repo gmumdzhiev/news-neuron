@@ -11,6 +11,8 @@ export interface INewsArticle {
   publishedAt: string;
   content: string;
   id?: string;
+  uniqueId: string;
+  favScore: number
 }
 export interface INewsArticleError {
   message: string;

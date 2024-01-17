@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 
-export const Entertainment = () => {
+export const Local = () => {
   return (
     <Grid container spacing={2}>
       {/* Left Section */}

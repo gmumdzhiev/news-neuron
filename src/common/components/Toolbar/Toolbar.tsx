@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 
@@ -11,13 +12,25 @@ import { Navigation } from "./components/Navigation/Navigation";
 import { MobileLogo } from "./components/MobileLogo/MobileLogo";
 import { DesktopLogo } from "./components/DesktopLogo/DesktopLogo";
 
+import { PageMenu } from "./components/settings/PageMenu/PageMenu";
+
 export const TopBar = () => {
+  const location = useLocation();
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedPage, setSelectedPage] = useState<null | string>(null);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   const rememberMeToken = localStorage.getItem("rememberMeToken");
   const currentUserEmail = localStorage.getItem("currentUserEmail");
+
+  useEffect(() => {
+    const currentPage = PageMenu.find((page) =>
+      location.pathname.startsWith(page.route),
+    );
+    if (currentPage) {
+      setSelectedPage(currentPage.title);
+    }
+  }, [location]);
 
   useEffect(() => {
     if (rememberMeToken || currentUserEmail) {
@@ -32,7 +45,6 @@ export const TopBar = () => {
   const handlePageClick = () => {
     handleCloseNavMenu();
   };
-
 
   return (
     <StyledToolbar position="static">
@@ -59,15 +71,16 @@ export const TopBar = () => {
               </Typography>
             </StyledSubContainer>
           </Box>
+          {currentUserEmail && (
+            <Navigation
+              handleCloseNavMenu={handleCloseNavMenu}
+              handlePageClick={handlePageClick}
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+          )}
 
-          <Navigation
-            handleCloseNavMenu={handleCloseNavMenu}
-            handlePageClick={handlePageClick}
-            selectedPage={selectedPage}
-            setSelectedPage={setSelectedPage}
-          />
-
-          <RightSideMenu loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+          <RightSideMenu loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
         </Toolbar>
       </Container>
     </StyledToolbar>

@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, useNavigate, Navigate, useLocation } from "react-router-dom";
 
 import "./App.css";
 import { Global } from "@emotion/react";
@@ -9,30 +9,46 @@ import { ResetPassword } from "./screens/ResetPassword/ResetPassword";
 import { News } from "./screens/Feeds/News/News";
 import { Tech } from "./screens/Feeds/Tech/Tech";
 import { Sport } from "./screens/Feeds/Sport/Sport";
-import { Entertainment } from "./screens/Feeds/Entertainment/Entertainment";
+import { Local } from "./screens/Feeds/Local/Local";
 import { NewsHeadlineDetails } from "./screens/Feeds/News/components/NewsHeadlines/components/NewsHeadlineDetails/NewsHeadlineDetails";
 import { NewsFeedDetails } from "./screens/Feeds/News/components/NewsFeed/components/NewsFeedDetails/NewsFeedDetails";
 import { Favourites } from "./screens/Favourites/Favourites";
+import { Login } from "./screens/Login/Login";
 
 export const App = () => {
+  const isAuthenticated = Boolean(localStorage.getItem("currentUserEmail"));
+  const navigate = useNavigate();
+  const location = useLocation();
+  const protectedRoutes = ['/favourites', '/news', '/sport', '/tech', '/Local']; // Add any other routes that require authentication here
+  
+  useEffect(() => {
+    if (!isAuthenticated && protectedRoutes.includes(location.pathname)) {
+      navigate('/login');
+    }
+  }, [isAuthenticated, navigate, location]);
+
+
   return (
     <>
       <Global styles={{ body: { background: "#e0e0e0" } }} />
       <TopBar />
       <Routes>
-        <Route path="/favourites" element={<Favourites/>}/>
-        <Route path="/register" element={<Register />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/news/*" element={<News />}>
+        <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/news" replace />} />
+        <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/" replace />} />
+        <Route path="/reset-password" element={!isAuthenticated ? <ResetPassword /> : <Navigate to="/" replace />} />
+        
+        <Route path="/favourites" element={isAuthenticated ? <Favourites /> : <Navigate to="/login" replace />} />
+        <Route path="/news/*" element={isAuthenticated ? <News /> : <Navigate to="/login" replace />}>
           <Route
             path="headline-details/:id"
             element={<NewsHeadlineDetails />}
           />
           <Route path="feed-details/:id" element={<NewsFeedDetails />} />
         </Route>
-        <Route path="/sport" element={<Sport />} />
-        <Route path="/tech" element={<Tech />} />
-        <Route path="/entertainment" element={<Entertainment />} />
+        <Route path="/sport" element={isAuthenticated ? <Sport /> : <Navigate to="/login" replace />} />
+        <Route path="/tech" element={isAuthenticated ? <Tech /> : <Navigate to="/login" replace />} />
+        <Route path="/Local" element={isAuthenticated ? <Local /> : <Navigate to="/login" replace />} />
+      
       </Routes>
     </>
   );

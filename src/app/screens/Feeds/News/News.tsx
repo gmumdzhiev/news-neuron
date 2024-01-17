@@ -10,10 +10,10 @@ import { NewsHeadlines } from "./components/NewsHeadlines/NewsHeadlines";
 
 const useStyles = makeStyles(() => ({
   typography: {
-    margin: "16px",
+    margin: "16px !important",
     borderBottom: "3px solid black",
-    fontWeight: "700",
-    fontSize: "1.2rem",
+    fontWeight: "700 !important",
+    fontSize: "1.2rem !important",
   },
 }));
 
