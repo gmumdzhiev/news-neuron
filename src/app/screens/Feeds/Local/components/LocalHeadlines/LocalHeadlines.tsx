@@ -10,11 +10,11 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../../../common/utils/hooks/reduxHooks";
-import { getNewsHeadlines } from "../../apiActions/getNewsHeadlines";
 
 // @ts-expect-error: Ignoring missing module error for image import
 import paperDefaultImage from "../../../../../../assets/newspaper-background.png";
 import { StyledTextContainer } from "../../../../../../common/styles/style";
+import { getLocalHeadlines } from "../../apiActions/getLocalHeadlines";
 
 
 
@@ -32,14 +32,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const NewsHeadlines = () => {
+export const LocalHeadlines = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
 
-  const newHeadlinesList = useAppSelector((state) => state.newsHeadlines.list);
+  const newHeadlinesList = useAppSelector((state) => state.localHeadlines.list);
 
   useEffect(() => {
-    dispatch(getNewsHeadlines());
+    dispatch(getLocalHeadlines());
   }, [dispatch]);
 
   if (!newHeadlinesList) {

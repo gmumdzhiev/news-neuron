@@ -108,7 +108,6 @@ export const Register = () => {
 
       localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
 
-      console.log("User registered successfully");
       setSnackbarMessage("User registered successfully");
       setSnackbarSeverity("success");
       navigate("/");

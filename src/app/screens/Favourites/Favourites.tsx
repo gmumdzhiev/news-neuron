@@ -11,12 +11,13 @@ import {
 import { Star, Favorite } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
-import { StyledTextContainer } from "../Feeds/News/components/NewsFeed/style";
+
 
 import { INewsArticle } from "../Feeds/News/interface/INewsArticle";
 
 // @ts-expect-error: Ignoring missing module error for image import
 import paperDefaultImage from "../../../assets/newspaper-background.png";
+import { StyledTextContainer } from "../../../common/styles/style";
 
 const useStyles = makeStyles(() => ({
   paper: {

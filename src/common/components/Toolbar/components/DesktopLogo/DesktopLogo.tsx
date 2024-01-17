@@ -1,6 +1,7 @@
 import React from "react";
-
+// import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
+
 import { useWindowDimensions } from "../../../../utils/hooks/useWindowDimensions";
 
 // @ts-expect-error: Ignoring missing module error for logo import

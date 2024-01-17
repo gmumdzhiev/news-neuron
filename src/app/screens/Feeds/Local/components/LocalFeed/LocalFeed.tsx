@@ -20,13 +20,12 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../../../../../common/utils/hooks/reduxHooks";
-import { INewsArticle } from "../../interface/INewsArticle";
-import { getNewsFeeds } from "../../apiActions/getNewsFeeds";
 
 // @ts-expect-error: Ignoring missing module error for image import
 import paperDefaultImage from "../../../../../../assets/newspaper-background.png";
 import { StyledTextContainer } from "../../../../../../common/styles/style";
-
+import { INewsArticle } from "../../../News/interface/INewsArticle";
+import { getLocalFeeds } from "../../apiActions/getLocalFeeds";
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -54,10 +53,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const NewsFeed = () => {
+export const LocalFeed = () => {
   const dispatch = useAppDispatch();
   const classes = useStyles();
-  const newsList = useAppSelector((state) => state.news.list);
+  const newsList = useAppSelector((state) => state.local.list);
   const newsArticles = useMemo(
     () =>
       newsList?.map((article) => ({
@@ -127,7 +126,7 @@ export const NewsFeed = () => {
   };
 
   useEffect(() => {
-    dispatch(getNewsFeeds());
+    dispatch(getLocalFeeds());
   }, []);
 
   useEffect(() => {
@@ -138,7 +137,7 @@ export const NewsFeed = () => {
   }, [page, newsArticles]);
 
   if (!newsArticles.length) {
-    return <CircularProgress/>;
+    return <CircularProgress />;
   }
 
   return (

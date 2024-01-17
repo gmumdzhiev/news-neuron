@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { INewsArticle, INewsArticleError } from "../interface/INewsArticle";
+import { INewsArticle, INewsArticleError } from "../../News/interface/INewsArticle";
 
-export const getNewsFeeds = createAsyncThunk<
+
+export const getTechFeeds = createAsyncThunk<
   INewsArticle[],
   void,
   { rejectValue: INewsArticleError }
->("getNewsFeed/get", async () => {
+>("getTechFeed/get", async () => {
   const today = new Date();
   const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
   
@@ -13,7 +14,7 @@ export const getNewsFeeds = createAsyncThunk<
   const formattedSevenDaysAgo = sevenDaysAgo.toISOString().split("T")[0];
 
   const url = [
-    "https://newsapi.org/v2/everything?q=europe",
+    "https://newsapi.org/v2/everything?q=tech",
     `&from=${formattedSevenDaysAgo}`,
     `&to=${formattedToday}`,
     "&sortBy=popularity",

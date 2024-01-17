@@ -45,8 +45,6 @@ export const getWeatherData = createAsyncThunk(
       },
     };
 
-    console.log(weatherData)
-
     return weatherData;
     
   

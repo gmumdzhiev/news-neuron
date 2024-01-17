@@ -12,7 +12,6 @@ export const getNewsHeadlines = createAsyncThunk<
   );
 
   const data = await response.json();
-  console.log('getNewsHeadlines',data)
   return data.articles;
 
 });

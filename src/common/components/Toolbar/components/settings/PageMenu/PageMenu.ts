@@ -6,11 +6,6 @@ export const PageMenu = [
   },
   {
     id: 2,
-    title: "Sport",
-    route: "/sport"
-  },
-  {
-    id: 3,
     title: "Tech",
     route: "/tech"
   },
