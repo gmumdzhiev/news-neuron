@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
 
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
-import { StyledSubContainer, StyledToolbar } from "./style";
+import { StyledToolbar } from "./style";
 import { LeftSideMenu } from "./components/LeftSideMenu/LeftSideMenu";
 import { RightSideMenu } from "./components/RightSideMenu/RightSideMenu";
 import { Navigation } from "./components/Navigation/Navigation";
@@ -16,6 +16,8 @@ import { PageMenu } from "./components/settings/PageMenu/PageMenu";
 
 export const TopBar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [selectedPage, setSelectedPage] = useState<null | string>(null);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -42,8 +44,9 @@ export const TopBar = () => {
     setAnchorElNav(null);
   };
 
-  const handlePageClick = () => {
+  const handlePageClick = (route: string) => {
     handleCloseNavMenu();
+    navigate(route)
   };
 
   return (
@@ -62,14 +65,6 @@ export const TopBar = () => {
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <DesktopLogo />
-            <StyledSubContainer>
-              <Typography
-                variant="body1"
-                sx={{ marginLeft: 2, alignSelf: "center", color: "grey" }}
-              >
-                Stimulate your mind with the latest news
-              </Typography>
-            </StyledSubContainer>
           </Box>
           {currentUserEmail && (
             <Navigation

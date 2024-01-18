@@ -55,7 +55,7 @@ export const LeftSideMenu = ({
             key={menu.id}
             onClick={() => {
               handleCloseNavMenu();
-              handlePageClick(menu.title);
+              handlePageClick(menu.title, menu.route);
             }}
             sx={{
               textDecoration:

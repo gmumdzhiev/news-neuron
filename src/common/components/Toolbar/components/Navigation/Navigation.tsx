@@ -17,7 +17,7 @@ export const Navigation = ({
     handleCloseNavMenu();
     setSelectedPage(title)
     navigate(route);
-  };
+  }; 
 
   return (
     <Box sx={{ display: { xs: "none", md: "flex" }, margin: '0 16px' }}>

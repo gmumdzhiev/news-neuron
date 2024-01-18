@@ -19,7 +19,8 @@ import {
 // @ts-expect-error: Ignoring missing module error for logo import
 import icon from "../../../assets/nn-icon.png";
 // @ts-expect-error: Ignoring missing module error for logo import
-import backgroundImage from "../../../assets/newspaper-background.png"; // Import the background image
+import backgroundImage from "../../../assets/background.jpg";
+import { Copyright } from "../../../common/components/Toolbar/components/common/Copyright/Copyright";
 
 interface FormData {
   email: string;
@@ -121,41 +122,37 @@ export const ResetPassword = () => {
       }}
     >
       <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-        sx={{ minHeight: "100vh" }}
+        item
+        sx={{ boxShadow: "none" }}
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        square
       >
-        <Paper
-          elevation={3}
+        <Box
           sx={{
-            padding: 3,
-            width: "100%",
-            maxWidth: 300,
-            margin: "0 16px",
+            my: 8,
+            mx: 4,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
           }}
         >
+          <Avatar sx={{ m: 1, bgcolor: "#000000" }}>
+            <StyledIconContainer>
+              <StyledIcon src={icon} />
+            </StyledIconContainer>
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Forgot password
+          </Typography>
           <Box
             component="form"
+            noValidate
             onSubmit={handleSubmit}
-            sx={{
-              mt: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            sx={{ mt: 1 }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "#000000" }}>
-              <StyledIconContainer>
-                <StyledIcon src={icon} />
-              </StyledIconContainer>
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Reset password
-            </Typography>
-
             <TextField
               margin="normal"
               required
@@ -185,7 +182,7 @@ export const ResetPassword = () => {
               required
               fullWidth
               name="confirmPassword"
-              label="Confirm New Password"
+              label="Confirm Password"
               type="password"
               id="confirmPassword"
               autoComplete="new-password"
@@ -195,23 +192,26 @@ export const ResetPassword = () => {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>
               Reset
             </Button>
+            <Copyright />
           </Box>
-        </Paper>
+        </Box>
       </Grid>
-      <Snackbar
-        anchorOrigin={{ vertical, horizontal }}
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackBarClose}
-      >
-        <Alert
+      {snackbarOpen && (
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={snackbarOpen}
+          autoHideDuration={6000}
           onClose={handleSnackBarClose}
-          severity={snackbarSeverity as AlertColor}
-          sx={{ width: "100%" }}
         >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+          <Alert
+            onClose={handleSnackBarClose}
+            severity={snackbarSeverity as AlertColor}
+            sx={{ width: "100%" }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      )}
     </Box>
   );
 };
